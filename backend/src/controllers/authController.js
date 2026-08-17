@@ -1,15 +1,15 @@
 import { matchedData } from "express-validator";
-import { registerUser, loginUser } from "../services/authService.js";
+import * as authService from "../services/authService.js";
 
 export const register = async (req, res) => {
   const data = matchedData(req);
-  const result = await registerUser(data);
+  const result = await authService.registerUser(data);
   res.status(201).json(result);
 };
 
 export const login = async (req, res) => {
   const data = matchedData(req);
-  const result = await loginUser(data);
+  const result = await authService.loginUser(data);
   res.json(result);
 };
 
