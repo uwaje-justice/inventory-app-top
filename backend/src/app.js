@@ -3,11 +3,11 @@ import cors from "cors";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { NotFoundError } from "./utils/errors.js";
 import passport from "./lib/passport.js";
-import authRoutes from "./routes/auth.js";
-import categoryRoutes from "./routes/categories.js";
-import supplierRoutes from "./routes/suppliers.js";
-import itemRoutes from "./routes/items.js";
-import vehicleRoutes from "./routes/vehicles.js";
+import authRoutes from "./routes/authRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import supplierRoutes from "./routes/supplierRoutes.js";
+import itemRoutes from "./routes/itemRoutes.js";
+import vehicleRoutes from "./routes/vehicleRoutes.js";
 
 const app = express();
 
