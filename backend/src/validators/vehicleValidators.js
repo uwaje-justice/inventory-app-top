@@ -1,45 +1,26 @@
 import { body, param } from "express-validator";
 import { idParam } from "./index.js";
 
-export const vehicleIdParam = idParam("vehicle");
+export const vehicleIdParamValidator = idParam("vehicle");
 
-export const itemIdParam = [
-  param("itemId").isUUID().withMessage("Invalid item ID"),
+export const itemIdParamValidator = [param("itemId").isUUID().withMessage("Invalid item ID")];
+
+export const createVehicleValidator = [
+  body("make").trim().notEmpty().withMessage("Make is required"),
+  body("model").trim().notEmpty().withMessage("Model is required"),
+  body("year").notEmpty().withMessage("Year is required").isInt({ min: 1886 }).withMessage("Year must be a valid year"),
 ];
 
-export const createVehicleValidation = [
-  body("make")
-    .trim()
-    .notEmpty().withMessage("Make is required"),
-  body("model")
-    .trim()
-    .notEmpty().withMessage("Model is required"),
-  body("year")
-    .notEmpty().withMessage("Year is required")
-    .isInt({ min: 1886 }).withMessage("Year must be a valid year"),
+export const updateVehicleValidator = [
+  ...vehicleIdParamValidator,
+  body("make").trim().notEmpty().withMessage("Make is required"),
+  body("model").trim().notEmpty().withMessage("Model is required"),
+  body("year").notEmpty().withMessage("Year is required").isInt({ min: 1886 }).withMessage("Year must be a valid year"),
 ];
 
-export const updateVehicleValidation = [
-  ...vehicleIdParam,
-  body("make")
-    .trim()
-    .notEmpty().withMessage("Make is required"),
-  body("model")
-    .trim()
-    .notEmpty().withMessage("Model is required"),
-  body("year")
-    .notEmpty().withMessage("Year is required")
-    .isInt({ min: 1886 }).withMessage("Year must be a valid year"),
+export const addItemValidator = [
+  ...vehicleIdParamValidator,
+  body("itemId").notEmpty().withMessage("Item ID is required").isUUID().withMessage("Invalid item ID"),
 ];
 
-export const addItemValidation = [
-  ...vehicleIdParam,
-  body("itemId")
-    .notEmpty().withMessage("Item ID is required")
-    .isUUID().withMessage("Invalid item ID"),
-];
-
-export const removeItemValidation = [
-  ...vehicleIdParam,
-  ...itemIdParam,
-];
+export const removeItemValidator = [...vehicleIdParamValidator, ...itemIdParamValidator];
