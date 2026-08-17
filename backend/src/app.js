@@ -6,6 +6,7 @@ import passport from "./lib/passport.js";
 import authRoutes from "./routes/auth.js";
 import categoryRoutes from "./routes/categories.js";
 import supplierRoutes from "./routes/suppliers.js";
+import itemRoutes from "./routes/items.js";
 import vehicleRoutes from "./routes/vehicles.js";
 
 const app = express();
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/suppliers", supplierRoutes);
+app.use("/api/items", itemRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 
 app.use((req, res, next) => {
