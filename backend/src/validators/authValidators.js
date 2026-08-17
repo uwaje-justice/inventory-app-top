@@ -22,7 +22,7 @@ export const registerValidator = [
     .withMessage("Password must be at least 8 characters"),
 
   body("confirmPassword")
-    .custom((value, { req }) => value !== req.body.password)
+    .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords must match"),
 ];
 
