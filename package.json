@@ -1,0 +1,16 @@
+{
+  "name": "inventory-app-top",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "workspaces": ["backend"],
+  "scripts": {
+    "dev": "concurrently -k -n backend \"npm run dev -w backend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
