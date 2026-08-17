@@ -5,6 +5,7 @@ import { NotFoundError } from "./utils/errors.js";
 import passport from "./lib/passport.js";
 import authRoutes from "./routes/auth.js";
 import categoryRoutes from "./routes/categories.js";
+import supplierRoutes from "./routes/suppliers.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/suppliers", supplierRoutes);
 
 app.use((req, res, next) => {
   next(new NotFoundError());
