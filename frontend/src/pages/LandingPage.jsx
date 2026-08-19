@@ -1,5 +1,102 @@
-const LandingPage = () => {
-  return <div>LandingPage</div>;
-};
+import { Link } from "react-router";
+import { Boxes, Car, Building2, Pencil } from "lucide-react";
+import Navbar from "../components/Navbar";
+import FeatureCard from "../components/FeatureCard";
+import StepItem from "../components/StepItem";
+import Footer from "../components/Footer";
 
-export default LandingPage;
+const features = [
+  { icon: Boxes, title: "Categories", description: "Organize parts by type for quick access." },
+  { icon: Car, title: "Vehicles", description: "Match parts to compatible vehicles." },
+  { icon: Building2, title: "Suppliers", description: "Track vendor info in one place." },
+  { icon: Pencil, title: "Full CRUD", description: "Create, read, update, delete everything." },
+];
+
+const steps = [
+  { title: "Create your account", description: "Sign up in seconds and get started right away." },
+  { title: "Add categories and suppliers", description: "Set up your inventory structure and vendor contacts." },
+  { title: "Add items and link to vehicles", description: "Stock your inventory and track vehicle compatibility." },
+  { title: "Track and manage everything", description: "View, update, and organize from one dashboard." },
+];
+
+export default function LandingPage() {
+  return (
+    <>
+      <Navbar />
+      <main>
+        {/* Hero */}
+        <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background">
+          {/* Decorative gradient orbs */}
+          <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-6xl px-5 pt-24 pb-16 md:px-8 md:pt-32">
+            <h1 className="mb-6 max-w-2xl font-heading text-4xl font-extrabold leading-tight tracking-tight text-on-surface md:text-6xl">
+              <span className="block animate-slide-up" style={{ animationDelay: "0ms" }}>
+                Vehicle parts
+              </span>
+              <span className="block animate-slide-up" style={{ animationDelay: "100ms" }}>
+                inventory, managed.
+              </span>
+            </h1>
+            <p
+              className="mb-10 max-w-lg text-base leading-relaxed text-on-surface-variant md:text-lg animate-slide-up"
+              style={{ animationDelay: "300ms" }}
+            >
+              Track parts, suppliers, and vehicle compatibility in one place. No spreadsheets. No
+              guesswork.
+            </p>
+            <div className="animate-scale-in" style={{ animationDelay: "500ms" }}>
+              <Link
+                to="/register"
+                className="inline-flex rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="bg-surface-container-low py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-5 md:px-8">
+            <h2 className="mb-4 font-heading text-2xl font-bold text-on-surface md:text-3xl">
+              Everything you need
+            </h2>
+            <p className="mb-12 max-w-md text-on-surface-variant">
+              One place to organize, track, and manage your vehicle parts inventory.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {features.map((feature, i) => (
+                <FeatureCard key={feature.title} {...feature} delay={i * 100} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Steps */}
+        <section className="bg-background py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-5 md:px-8">
+            <h2 className="mb-4 font-heading text-2xl font-bold text-on-surface md:text-3xl">
+              How it works
+            </h2>
+            <p className="mb-12 max-w-md text-on-surface-variant">
+              Four steps from sign-up to full inventory control.
+            </p>
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              {steps.map((step, i) => (
+                <StepItem
+                  key={step.title}
+                  number={`0${i + 1}`}
+                  {...step}
+                  delay={i * 100}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
