@@ -1,7 +1,7 @@
 export const STORAGE_TOKEN_KEY = "motiv-token";
 export const STORAGE_THEME_KEY = "motiv-theme";
 
-export const API_BASE = "/api";
+const API_BASE = "/api";
 export const API_ROUTES = {
   auth: { login: `${API_BASE}/auth/login`, register: `${API_BASE}/auth/register`, me: `${API_BASE}/auth/me` },
   categories: `${API_BASE}/categories`,

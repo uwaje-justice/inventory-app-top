@@ -4,7 +4,6 @@ import { AlertTriangle } from "lucide-react";
 
 export default function ConfirmDialog({ open, title, message, onConfirm, onCancel }) {
   const cancelRef = useRef(null);
-  const dialogRef = useRef(null);
 
   useEffect(() => {
     if (open) {
@@ -51,7 +50,6 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
 
       {/* Dialog */}
       <div
-        ref={dialogRef}
         className="relative w-full max-w-sm rounded-2xl bg-surface-container-high p-6 shadow-xl animate-scale-in"
       >
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-error/10">

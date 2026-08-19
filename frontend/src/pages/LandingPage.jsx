@@ -5,6 +5,7 @@ import HeroMockup from "../components/HeroMockup";
 import FeatureCard from "../components/FeatureCard";
 import StepItem from "../components/StepItem";
 import Footer from "../components/Footer";
+import { useAuth } from "../hooks/useAuth";
 
 const features = [
   { icon: Boxes, title: "Categories", description: "Organize parts by type for quick access." },
@@ -21,6 +22,8 @@ const steps = [
 ];
 
 export default function LandingPage() {
+  const { isLoggedIn } = useAuth();
+
   return (
     <>
       <Navbar />
@@ -59,18 +62,29 @@ export default function LandingPage() {
                 guesswork.
               </p>
               <div className="flex flex-wrap items-center gap-4 animate-scale-in" style={{ animationDelay: "500ms" }}>
-                <Link
-                  to="/register"
-                  className="inline-flex rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                  Get Started
-                </Link>
-                <Link
-                  to="/login"
-                  className="inline-flex rounded-full border border-outline px-8 py-3.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                  Login
-                </Link>
+                {isLoggedIn ? (
+                  <Link
+                    to="/dashboard"
+                    className="inline-flex rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      to="/register"
+                      className="inline-flex rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    >
+                      Get Started
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="inline-flex rounded-full border border-outline px-8 py-3.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    >
+                      Login
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 

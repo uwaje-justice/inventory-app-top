@@ -6,6 +6,7 @@ import { setToken } from "../utils/auth";
 import BackLink from "../components/BackLink";
 import ThemeToggle from "../components/ThemeToggle";
 import FormInput from "../components/FormInput";
+import ErrorAlert from "../components/ErrorAlert";
 import Footer from "../components/Footer";
 
 const FIELDS = [
@@ -102,14 +103,7 @@ export default function LoginPage() {
               <ThemeToggle />
             </div>
 
-            {apiError && (
-              <div
-                role="alert"
-                className="mb-6 rounded-xl border border-error/30 bg-error-container px-4 py-3 text-sm text-on-error-container animate-slide-up"
-              >
-                {apiError}
-              </div>
-            )}
+            {apiError && <ErrorAlert message={apiError} />}
 
             <form onSubmit={handleSubmit} noValidate>
               <fieldset disabled={loading} className="space-y-5 border-none p-0 m-0">
