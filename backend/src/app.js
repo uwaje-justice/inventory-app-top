@@ -13,6 +13,7 @@ import vehicleRoutes from "./routes/vehicleRoutes.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
 // ── Security headers ─────────────────────────────────────────────────────────
 // helmet sets HTTP headers like X-Content-Type-Options, X-Frame-Options,
 // Strict-Transport-Security, etc. that protect against common web vulnerabilities.
