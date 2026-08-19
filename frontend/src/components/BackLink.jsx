@@ -1,7 +1,7 @@
-import { Link } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { Link } from 'react-router';
+import { ArrowLeft } from 'lucide-react';
 
-export default function BackLink({ to = "/", children = "Back to home" }) {
+export default function BackLink({ to = '/', children = 'Back to home' }) {
   return (
     <Link
       to={to}
