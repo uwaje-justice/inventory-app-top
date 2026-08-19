@@ -58,12 +58,18 @@ export default function LandingPage() {
                 Track parts, suppliers, and vehicle compatibility in one place. No spreadsheets. No
                 guesswork.
               </p>
-              <div className="animate-scale-in" style={{ animationDelay: "500ms" }}>
+              <div className="flex flex-wrap items-center gap-4 animate-scale-in" style={{ animationDelay: "500ms" }}>
                 <Link
                   to="/register"
                   className="inline-flex rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   Get Started
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex rounded-full border border-outline px-8 py-3.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  Login
                 </Link>
               </div>
             </div>

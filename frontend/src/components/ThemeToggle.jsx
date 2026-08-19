@@ -1,12 +1,19 @@
+import { useRef } from "react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 
 export default function ThemeToggle() {
   const { isDark, toggle } = useTheme();
+  const btnRef = useRef(null);
+
+  const handleClick = () => {
+    toggle(btnRef.current);
+  };
 
   return (
     <button
-      onClick={toggle}
+      ref={btnRef}
+      onClick={handleClick}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className="relative flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant transition-colors hover:bg-surface-container-highest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
