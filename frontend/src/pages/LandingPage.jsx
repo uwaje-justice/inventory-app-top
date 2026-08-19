@@ -41,7 +41,7 @@ export default function LandingPage() {
             <Cog size={20} className="absolute top-[10%] left-[45%] rotate-30 text-secondary/10" />
           </div>
 
-          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 pt-24 pb-16 md:grid-cols-2 md:gap-12 md:px-8 md:pt-32">
+          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 pt-24 pb-16 md:grid-cols-2 md:gap-12 md:px-8 md:pt-32">
             <div>
               <h1 className="mb-6 max-w-2xl font-heading text-4xl font-extrabold leading-tight tracking-tight text-on-surface md:text-6xl">
                 <span className="block animate-slide-up" style={{ animationDelay: "0ms" }}>
