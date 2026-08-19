@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Boxes, Car, Building2, Pencil, ChevronDown } from "lucide-react";
+import { Boxes, Car, Building2, Pencil, Wrench, Cog, ChevronDown } from "lucide-react";
 import Navbar from "../components/Navbar";
 import HeroMockup from "../components/HeroMockup";
 import FeatureCard from "../components/FeatureCard";
@@ -31,7 +31,17 @@ export default function LandingPage() {
           <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
 
-          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 pt-24 pb-16 md:grid-cols-2 md:px-8 md:pt-32">
+          {/* Floating icons */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+            <Wrench size={20} className="absolute top-[15%] left-[8%] rotate-12 text-primary/15" />
+            <Cog size={24} className="absolute top-[25%] right-[12%] -rotate-45 text-tertiary/15" />
+            <Boxes size={18} className="absolute bottom-[30%] left-[15%] rotate-6 text-secondary/15" />
+            <Car size={22} className="absolute bottom-[20%] right-[8%] -rotate-12 text-primary/15" />
+            <Wrench size={16} className="absolute top-[60%] left-[5%] -rotate-30 text-tertiary/10" />
+            <Cog size={20} className="absolute top-[10%] left-[45%] rotate-30 text-secondary/10" />
+          </div>
+
+          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 pt-24 pb-16 md:grid-cols-2 md:gap-12 md:px-8 md:pt-32">
             <div>
               <h1 className="mb-6 max-w-2xl font-heading text-4xl font-extrabold leading-tight tracking-tight text-on-surface md:text-6xl">
                 <span className="block animate-slide-up" style={{ animationDelay: "0ms" }}>
@@ -58,8 +68,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Dashboard mockup — hidden on mobile, shown on md+ */}
-            <div className="hidden md:block">
+            {/* Dashboard mockup */}
+            <div>
               <HeroMockup />
             </div>
           </div>
