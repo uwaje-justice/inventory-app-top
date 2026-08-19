@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Boxes, Car, Building2, Pencil } from "lucide-react";
+import { Boxes, Car, Building2, Pencil, ChevronDown } from "lucide-react";
 import Navbar from "../components/Navbar";
 import HeroMockup from "../components/HeroMockup";
 import FeatureCard from "../components/FeatureCard";
@@ -26,7 +26,7 @@ export default function LandingPage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background">
+        <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background md:min-h-[calc(100vh-5rem)]">
           {/* Decorative gradient orbs */}
           <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
@@ -63,10 +63,19 @@ export default function LandingPage() {
               <HeroMockup />
             </div>
           </div>
+
+          {/* Scroll indicator */}
+          <a
+            href="#features"
+            aria-label="Scroll to features"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-on-surface-variant transition-colors hover:text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <ChevronDown size={28} aria-hidden="true" />
+          </a>
         </section>
 
         {/* Features */}
-        <section className="bg-surface-container-low py-20 md:py-28">
+        <section id="features" className="bg-surface-container-low py-20 md:py-28">
           <div className="mx-auto max-w-6xl px-5 md:px-8">
             <h2 className="mb-4 font-heading text-2xl font-bold text-on-surface md:text-3xl">
               Everything you need
