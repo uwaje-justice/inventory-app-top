@@ -23,6 +23,14 @@ const main = async () => {
 
   console.log(`Created user: ${user.username} (${user.email})`);
 
+  // Skip seeding items/categories/suppliers/vehicles if they already exist.
+  // This makes the seed safe to run on every deploy without crashing.
+  const existingItems = await db.item.findFirst({ where: { userId: user.id } });
+  if (existingItems) {
+    console.log("Database already seeded. Skipping.");
+    return;
+  }
+
   const categories = await Promise.all([
     db.category.upsert({
       where: { name_userId: { name: "Engine", userId: user.id } },
