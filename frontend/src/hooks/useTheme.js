@@ -73,7 +73,7 @@ export function useTheme() {
 
       setTimeout(() => {
         setIsDark(nextIsDark);
-      }, DURATION * 0.15);
+      }, DURATION * 0.45);
 
       setTimeout(() => {
         overlay.style.opacity = "0";
