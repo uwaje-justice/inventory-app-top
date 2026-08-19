@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
-import { ArrowLeft, Package, AlertCircle } from "lucide-react";
-import { getItem } from "../api/services";
+import { useParams, Link, useNavigate } from "react-router";
+import { ArrowLeft, Package, AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { getItem, deleteItem } from "../api/services";
 
 function formatPrice(val) {
   const n = Number(val);
@@ -10,9 +10,11 @@ function formatPrice(val) {
 
 export default function ItemDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,6 +24,19 @@ export default function ItemDetailPage() {
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this item?")) return;
+    setDeleting(true);
+    try {
+      await deleteItem(id);
+      navigate("/items");
+    } catch {
+      setError("Failed to delete item.");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -51,11 +66,19 @@ export default function ItemDetailPage() {
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-tertiary/10">
           <Package size={24} className="text-tertiary" aria-hidden="true" />
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">{item.name}</h1>
           {item.description && (
             <p className="mt-1 text-sm text-on-surface-variant">{item.description}</p>
           )}
+        </div>
+        <div className="flex items-center gap-2">
+          <Link to={`/items/${id}/edit`} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface" aria-label="Edit item">
+            <Pencil size={16} />
+          </Link>
+          <button onClick={handleDelete} disabled={deleting} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container disabled:opacity-60" aria-label="Delete item">
+            <Trash2 size={16} />
+          </button>
         </div>
       </div>
 

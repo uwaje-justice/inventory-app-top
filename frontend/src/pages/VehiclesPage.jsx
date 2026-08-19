@@ -38,10 +38,10 @@ export default function VehiclesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">Vehicles</h1>
-        <button className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+        <Link to="/vehicles/new" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
           <Plus size={16} aria-hidden="true" />
           Add Vehicle
-        </button>
+        </Link>
       </div>
 
       {vehicles.length === 0 ? (

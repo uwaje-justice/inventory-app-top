@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
-import { ArrowLeft, Truck, Package, AlertCircle } from "lucide-react";
-import { getSupplier } from "../api/services";
+import { useParams, Link, useNavigate } from "react-router";
+import { ArrowLeft, Truck, Package, AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { getSupplier, deleteSupplier } from "../api/services";
 
 function formatPrice(val) {
   const n = Number(val);
@@ -10,9 +10,11 @@ function formatPrice(val) {
 
 export default function SupplierDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [supplier, setSupplier] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,6 +24,19 @@ export default function SupplierDetailPage() {
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this supplier? Items will keep their data.")) return;
+    setDeleting(true);
+    try {
+      await deleteSupplier(id);
+      navigate("/suppliers");
+    } catch {
+      setError("Failed to delete supplier.");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -51,11 +66,19 @@ export default function SupplierDetailPage() {
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/10">
           <Truck size={24} className="text-secondary" aria-hidden="true" />
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">{supplier.name}</h1>
           {supplier.contactName && (
             <p className="mt-1 text-sm text-on-surface-variant">{supplier.contactName}</p>
           )}
+        </div>
+        <div className="flex items-center gap-2">
+          <Link to={`/suppliers/${id}/edit`} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface" aria-label="Edit supplier">
+            <Pencil size={16} />
+          </Link>
+          <button onClick={handleDelete} disabled={deleting} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container disabled:opacity-60" aria-label="Delete supplier">
+            <Trash2 size={16} />
+          </button>
         </div>
       </div>
 
