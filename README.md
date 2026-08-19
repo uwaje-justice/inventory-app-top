@@ -12,6 +12,48 @@ A full-stack inventory management app for vehicle parts. Track parts, suppliers,
 - **Auth** - Register and login with JWT authentication
 - **Dark mode** - Toggle between light and dark themes
 
+## Screenshots
+
+### Landing page
+
+#### mobile
+![Landing page](screenshots/landing-mobile.webp)
+
+#### desktop
+![Landing page](screenshots/desktop-landing.webp)
+
+### Dashboard
+
+#### mobile
+![Dashboard](screenshots/dashboard-mobile.webp)
+
+#### desktop
+![Dashboard](screenshots/dashboard-desktop.webp)
+
+### Items
+
+#### mobile
+![Items](screenshots/items-mobile.webp)
+
+#### dashboard
+![Items](screenshots/items-desktop.webp)
+
+### Item detail
+
+#### mobile
+![Item detail](screenshots/items-details-mobile.webp)
+
+#### dashboard
+![Item detail](screenshots/items-details-desktop.webp)
+
+### Light mode
+
+#### mobile
+![Dark mode](screenshots/light-mode.webp)
+
+#### dashboard
+![Dark mode](screenshots/light-mode-desktop.webp)
+
 ## Tech stack
 
 - **Frontend:** React 19, Vite 6, TailwindCSS 4, React Router 7
