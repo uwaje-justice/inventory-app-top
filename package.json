@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "workspaces": ["backend"],
+  "workspaces": ["backend", "frontend"],
   "scripts": {
-    "dev": "concurrently -k -n backend \"npm run dev -w backend\""
+    "dev": "concurrently -k -n backend,frontend \"npm run dev -w backend\" \"npm run dev -w frontend\""
   },
   "keywords": [],
   "author": "",

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validate } from "../middlewares/validate.js";
 import authenticate from "../middlewares/authenticate.js";
 import * as categoryController from "../controllers/categoryController.js";
+
 import {
   categoryIdParamValidator,
   createCategoryValidator,

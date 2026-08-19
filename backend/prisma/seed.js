@@ -123,49 +123,154 @@ const main = async () => {
 
   const items = await Promise.all([
     db.item.create({
-      data: { name: "Oil Filter", price: 12.99, quantity: 50, categoryId: categories[0].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Oil Filter",
+        price: 12.99,
+        quantity: 50,
+        categoryId: categories[0].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Air Filter", price: 8.99, quantity: 30, categoryId: categories[0].id, supplierId: suppliers[1].id, userId: user.id },
+      data: {
+        name: "Air Filter",
+        price: 8.99,
+        quantity: 30,
+        categoryId: categories[0].id,
+        supplierId: suppliers[1].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Spark Plugs (Set)", price: 24.99, quantity: 25, categoryId: categories[0].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Spark Plugs (Set)",
+        price: 24.99,
+        quantity: 25,
+        categoryId: categories[0].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Brake Pads (Front)", price: 45.99, quantity: 20, categoryId: categories[1].id, supplierId: suppliers[2].id, userId: user.id },
+      data: {
+        name: "Brake Pads (Front)",
+        price: 45.99,
+        quantity: 20,
+        categoryId: categories[1].id,
+        supplierId: suppliers[2].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Brake Rotor (Front)", price: 65.99, quantity: 15, categoryId: categories[1].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Brake Rotor (Front)",
+        price: 65.99,
+        quantity: 15,
+        categoryId: categories[1].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Brake Fluid", price: 9.99, quantity: 40, categoryId: categories[1].id, supplierId: suppliers[1].id, userId: user.id },
+      data: {
+        name: "Brake Fluid",
+        price: 9.99,
+        quantity: 40,
+        categoryId: categories[1].id,
+        supplierId: suppliers[1].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Car Battery", price: 129.99, quantity: 10, categoryId: categories[2].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Car Battery",
+        price: 129.99,
+        quantity: 10,
+        categoryId: categories[2].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Alternator", price: 189.99, quantity: 5, categoryId: categories[2].id, supplierId: suppliers[2].id, userId: user.id },
+      data: {
+        name: "Alternator",
+        price: 189.99,
+        quantity: 5,
+        categoryId: categories[2].id,
+        supplierId: suppliers[2].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Spark Plug Wires", price: 34.99, quantity: 12, categoryId: categories[2].id, supplierId: suppliers[1].id, userId: user.id },
+      data: {
+        name: "Spark Plug Wires",
+        price: 34.99,
+        quantity: 12,
+        categoryId: categories[2].id,
+        supplierId: suppliers[1].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Shock Absorber", price: 89.99, quantity: 8, categoryId: categories[3].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Shock Absorber",
+        price: 89.99,
+        quantity: 8,
+        categoryId: categories[3].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Strut Assembly", price: 149.99, quantity: 6, categoryId: categories[3].id, supplierId: suppliers[2].id, userId: user.id },
+      data: {
+        name: "Strut Assembly",
+        price: 149.99,
+        quantity: 6,
+        categoryId: categories[3].id,
+        supplierId: suppliers[2].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Control Arm", price: 79.99, quantity: 10, categoryId: categories[3].id, supplierId: suppliers[1].id, userId: user.id },
+      data: {
+        name: "Control Arm",
+        price: 79.99,
+        quantity: 10,
+        categoryId: categories[3].id,
+        supplierId: suppliers[1].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Muffler", price: 99.99, quantity: 7, categoryId: categories[4].id, supplierId: suppliers[0].id, userId: user.id },
+      data: {
+        name: "Muffler",
+        price: 99.99,
+        quantity: 7,
+        categoryId: categories[4].id,
+        supplierId: suppliers[0].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Catalytic Converter", price: 249.99, quantity: 4, categoryId: categories[4].id, supplierId: suppliers[2].id, userId: user.id },
+      data: {
+        name: "Catalytic Converter",
+        price: 249.99,
+        quantity: 4,
+        categoryId: categories[4].id,
+        supplierId: suppliers[2].id,
+        userId: user.id,
+      },
     }),
     db.item.create({
-      data: { name: "Exhaust Pipe", price: 59.99, quantity: 12, categoryId: categories[4].id, supplierId: suppliers[1].id, userId: user.id },
+      data: {
+        name: "Exhaust Pipe",
+        price: 59.99,
+        quantity: 12,
+        categoryId: categories[4].id,
+        supplierId: suppliers[1].id,
+        userId: user.id,
+      },
     }),
   ]);
 
