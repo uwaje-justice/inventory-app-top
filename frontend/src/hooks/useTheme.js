@@ -13,7 +13,7 @@ const THEME_COLORS = {
   dark: "#1b1c22",
 };
 
-const DURATION = 500;
+const DURATION = 800;
 
 export function useTheme() {
   const [isDark, setIsDark] = useState(getInitialTheme);
@@ -60,7 +60,7 @@ export function useTheme() {
         background: bgColor,
         opacity: "0",
         clipPath: `circle(0% at ${xPercent}% ${yPercent}%)`,
-        transition: `clip-path ${DURATION}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${DURATION * 0.6}ms ease-in-out`,
+        transition: `clip-path ${DURATION}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${DURATION * 0.7}ms ease-in-out`,
         pointerEvents: "none",
       });
 
@@ -75,16 +75,16 @@ export function useTheme() {
 
       setTimeout(() => {
         setIsDark(nextIsDark);
-      }, DURATION * 0.35);
+      }, DURATION * 0.45);
 
       setTimeout(() => {
         overlay.style.opacity = "0";
-      }, DURATION * 0.6);
+      }, DURATION * 0.7);
 
       setTimeout(() => {
         overlay.remove();
         animating.current = false;
-      }, DURATION + 200);
+      }, DURATION + 300);
     },
     [isDark],
   );
