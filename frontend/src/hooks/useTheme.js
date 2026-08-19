@@ -58,8 +58,9 @@ export function useTheme() {
         inset: "0",
         zIndex: "9999",
         background: bgColor,
+        opacity: "0",
         clipPath: `circle(0% at ${xPercent}% ${yPercent}%)`,
-        transition: `clip-path ${DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        transition: `clip-path ${DURATION}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${DURATION * 0.6}ms ease-in-out`,
         pointerEvents: "none",
       });
 
@@ -67,18 +68,23 @@ export function useTheme() {
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
+          overlay.style.opacity = "0.7";
           overlay.style.clipPath = `circle(150% at ${xPercent}% ${yPercent}%)`;
         });
       });
 
       setTimeout(() => {
         setIsDark(nextIsDark);
-      }, DURATION * 0.4);
+      }, DURATION * 0.35);
+
+      setTimeout(() => {
+        overlay.style.opacity = "0";
+      }, DURATION * 0.6);
 
       setTimeout(() => {
         overlay.remove();
         animating.current = false;
-      }, DURATION + 50);
+      }, DURATION + 200);
     },
     [isDark],
   );
