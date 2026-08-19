@@ -103,7 +103,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="relative flex flex-1 flex-col items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background px-5 pt-16 pb-16 md:px-8">
+      <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background px-5 py-16 md:px-8">
         {/* Decorative gradient orbs */}
         <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
