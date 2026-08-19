@@ -26,7 +26,9 @@ export default function EntityFormLayout({
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
           <Icon size={24} className="text-primary" aria-hidden="true" />
         </div>
-        <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">{title}</h1>
+        <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">
+          {title}
+        </h1>
       </div>
 
       <div className="rounded-2xl border border-outline-variant bg-surface-container p-6 sm:p-8">

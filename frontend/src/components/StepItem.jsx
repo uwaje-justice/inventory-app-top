@@ -9,7 +9,9 @@ export default function StepItem({ number, title, description, delay = 0 }) {
       className={`flex gap-5 ${isInView ? "animate-slide-up" : "opacity-0"}`}
       style={{ animationDelay: `${delay}ms` }}
     >
-      <span className="font-data text-3xl font-bold text-primary md:text-4xl">{number}</span>
+      <span className="font-data text-3xl font-bold text-primary md:text-4xl">
+        {number}
+      </span>
       <div>
         <h3 className="mb-1 font-heading text-lg font-bold text-on-surface">{title}</h3>
         <p className="text-sm leading-relaxed text-on-surface-variant">{description}</p>

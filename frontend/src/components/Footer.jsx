@@ -18,7 +18,11 @@ const GithubIcon = ({ size = 18, ...props }) => (
 
 const links = [
   { icon: XIcon, href: "https://x.com/uwaje_justice_", label: "X (Twitter)" },
-  { icon: LinkedinIcon, href: "https://www.linkedin.com/in/uwaje-justice-1a1a17266/", label: "LinkedIn" },
+  {
+    icon: LinkedinIcon,
+    href: "https://www.linkedin.com/in/uwaje-justice-1a1a17266/",
+    label: "LinkedIn",
+  },
   { icon: GithubIcon, href: "https://github.com/uwaje-justice", label: "GitHub" },
 ];
 

@@ -32,7 +32,9 @@ export function useTheme() {
     (buttonEl) => {
       if (animating.current) return;
 
-      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
       if (!buttonEl || prefersReduced) {
         setIsDark((prev) => !prev);

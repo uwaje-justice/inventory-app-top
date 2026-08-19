@@ -19,16 +19,39 @@ export default function HeroMockup() {
           {/* Stats row - 4 cards */}
           <div className="grid grid-cols-4 gap-2">
             {[
-              { label: "Categories", value: "5", icon: Boxes, color: "text-primary", bg: "bg-primary/10" },
-              { label: "Items", value: "48", icon: Package, color: "text-tertiary", bg: "bg-tertiary/10" },
-              { label: "Suppliers", value: "8", icon: Truck, color: "text-secondary", bg: "bg-secondary/10" },
-              { label: "Vehicles", value: "12", icon: Car, color: "text-on-primary-container", bg: "bg-primary-container/40" },
+              {
+                label: "Categories",
+                value: "5",
+                icon: Boxes,
+                color: "text-primary",
+                bg: "bg-primary/10",
+              },
+              {
+                label: "Items",
+                value: "48",
+                icon: Package,
+                color: "text-tertiary",
+                bg: "bg-tertiary/10",
+              },
+              {
+                label: "Suppliers",
+                value: "8",
+                icon: Truck,
+                color: "text-secondary",
+                bg: "bg-secondary/10",
+              },
+              {
+                label: "Vehicles",
+                value: "12",
+                icon: Car,
+                color: "text-on-primary-container",
+                bg: "bg-primary-container/40",
+              },
             ].map(({ label, value, icon: Icon, color, bg }) => (
-              <div
-                key={label}
-                className="rounded-xl bg-surface-container-low p-2.5"
-              >
-                <div className={`mb-1.5 flex h-6 w-6 items-center justify-center rounded-lg ${bg}`}>
+              <div key={label} className="rounded-xl bg-surface-container-low p-2.5">
+                <div
+                  className={`mb-1.5 flex h-6 w-6 items-center justify-center rounded-lg ${bg}`}
+                >
                   <Icon size={12} className={color} aria-hidden="true" />
                 </div>
                 <p className="font-data text-base font-bold text-on-surface">{value}</p>

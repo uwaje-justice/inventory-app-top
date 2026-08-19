@@ -33,7 +33,9 @@ export function useFetch(fetcher, deps = []) {
           dispatch({ type: "FETCH_ERROR", payload: message });
         }
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, deps);
 
   useEffect(() => {

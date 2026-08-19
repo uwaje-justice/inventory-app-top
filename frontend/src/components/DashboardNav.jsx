@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
-import { Menu, X, LogOut, LayoutDashboard, Boxes, Package, Truck, Car } from "lucide-react";
+import {
+  Menu,
+  X,
+  LogOut,
+  LayoutDashboard,
+  Boxes,
+  Package,
+  Truck,
+  Car,
+} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import Logo from "./Logo";
 import { logout } from "../utils/auth";
@@ -93,7 +102,11 @@ export default function DashboardNav() {
             {navLinks.map(({ to, label, icon: Icon }, i) => {
               const active = pathname === to;
               return (
-                <li key={to} className="animate-click-in" style={{ animationDelay: `${i * 50 + 80}ms` }}>
+                <li
+                  key={to}
+                  className="animate-click-in"
+                  style={{ animationDelay: `${i * 50 + 80}ms` }}
+                >
                   <Link
                     to={to}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${

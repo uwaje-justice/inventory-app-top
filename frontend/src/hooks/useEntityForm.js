@@ -41,7 +41,14 @@ function formReducer(state, action) {
   }
 }
 
-export function useEntityForm({ defaultValues, fetcher, createFn, updateFn, id, isEdit }) {
+export function useEntityForm({
+  defaultValues,
+  fetcher,
+  createFn,
+  updateFn,
+  id,
+  isEdit,
+}) {
   const [state, dispatch] = useReducer(formReducer, {
     ...initialState,
     values: defaultValues,
@@ -58,7 +65,9 @@ export function useEntityForm({ defaultValues, fetcher, createFn, updateFn, id, 
       .catch(() => {
         if (!cancelled) dispatch({ type: "LOAD_ERROR", payload: "Failed to load data." });
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id, isEdit, fetcher]);
 
   const setField = useCallback((name, value) => {

@@ -27,7 +27,9 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   if (!open) return null;
@@ -55,10 +57,16 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-error/10">
           <AlertTriangle size={24} className="text-error" aria-hidden="true" />
         </div>
-        <h2 id="confirm-dialog-title" className="mb-2 font-heading text-lg font-bold text-on-surface">
+        <h2
+          id="confirm-dialog-title"
+          className="mb-2 font-heading text-lg font-bold text-on-surface"
+        >
           {title}
         </h2>
-        <p id="confirm-dialog-message" className="mb-6 text-sm leading-relaxed text-on-surface-variant">
+        <p
+          id="confirm-dialog-message"
+          className="mb-6 text-sm leading-relaxed text-on-surface-variant"
+        >
           {message}
         </p>
         <div className="flex justify-end gap-3">

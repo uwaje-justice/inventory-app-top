@@ -20,10 +20,7 @@ function FormInput({
 
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="mb-1.5 block text-sm font-medium text-on-surface"
-      >
+      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-on-surface">
         {label}
         {required && (
           <span className="ml-0.5 text-error" aria-hidden="true">
