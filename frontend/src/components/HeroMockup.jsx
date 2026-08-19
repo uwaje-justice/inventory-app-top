@@ -3,7 +3,7 @@ import { Boxes, Car, Wrench } from "lucide-react";
 export default function HeroMockup() {
   return (
     <div className="animate-scale-in" style={{ animationDelay: "400ms" }}>
-      <div className="relative w-full max-w-md rounded-2xl border border-outline-variant bg-surface-container p-4 shadow-2xl shadow-shadow/10 md:max-w-lg">
+      <div className="relative mx-auto w-full max-w-xl rounded-2xl border border-outline-variant bg-surface-container p-4 shadow-2xl shadow-shadow/10">
         {/* Window chrome */}
         <div className="mb-4 flex items-center gap-2">
           <span className="h-3 w-3 rounded-full bg-error/60" />

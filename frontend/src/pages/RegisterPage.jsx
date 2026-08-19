@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { User, Mail, Lock } from "lucide-react";
 import api from "../api/axios";
-import Navbar from "../components/Navbar";
 import BackLink from "../components/BackLink";
+import ThemeToggle from "../components/ThemeToggle";
 import FormInput from "../components/FormInput";
 import Footer from "../components/Footer";
 
 const FIELDS = [
-  { name: "username", label: "Username", type: "text", autoComplete: "username" },
-  { name: "email", label: "Email", type: "email", autoComplete: "email" },
-  { name: "password", label: "Password", type: "password", autoComplete: "new-password" },
-  { name: "confirmPassword", label: "Confirm Password", type: "password", autoComplete: "new-password" },
+  { name: "username", label: "Username", type: "text", autoComplete: "username", icon: User },
+  { name: "email", label: "Email", type: "email", autoComplete: "email", icon: Mail },
+  { name: "password", label: "Password", type: "password", autoComplete: "new-password", icon: Lock },
+  { name: "confirmPassword", label: "Confirm Password", type: "password", autoComplete: "new-password", icon: Lock },
 ];
 
 function validate(values) {
@@ -101,12 +102,16 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
-      <Navbar />
-      <main className="relative flex min-h-screen flex-col items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background px-5 pt-24 pb-16 md:px-8">
+    <div className="flex min-h-screen flex-col">
+      <main className="relative flex flex-1 flex-col items-center overflow-hidden bg-gradient-to-b from-surface-container-low to-background px-5 pt-16 pb-16 md:px-8">
         {/* Decorative gradient orbs */}
         <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
+
+        {/* Theme toggle */}
+        <div className="absolute top-5 right-5 md:top-8 md:right-8">
+          <ThemeToggle />
+        </div>
 
         <div className="relative w-full max-w-md animate-slide-up">
           <div className="mb-8">
@@ -182,6 +187,6 @@ export default function RegisterPage() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
