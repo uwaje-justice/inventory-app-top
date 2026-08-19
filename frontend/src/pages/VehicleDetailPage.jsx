@@ -1,85 +1,55 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router";
-import { ArrowLeft, Car, Package, AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { useState, useCallback } from "react";
+import { useParams, useNavigate, Link } from "react-router";
+import { Car, Package } from "lucide-react";
 import { getVehicle, deleteVehicle } from "../api/services";
-
-function formatPrice(val) {
-  const n = Number(val);
-  return isNaN(n) ? "$0.00" : `$${n.toFixed(2)}`;
-}
+import { useFetch } from "../hooks/useFetch";
+import { formatPrice } from "../utils/format";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
+import ConfirmDialog from "../components/ConfirmDialog";
+import EntityDetailHeader from "../components/EntityDetailHeader";
 
 export default function VehicleDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [vehicle, setVehicle] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    getVehicle(id)
-      .then((data) => { if (!cancelled) setVehicle(data); })
-      .catch(() => { if (!cancelled) setError("Failed to load vehicle."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [id]);
+  const { data: vehicle, loading, error, refetch } = useFetch(() => getVehicle(id), [id]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("Delete this vehicle?")) return;
+  const handleDelete = useCallback(async () => {
     setDeleting(true);
     try {
       await deleteVehicle(id);
       navigate("/vehicles");
     } catch {
-      setError("Failed to delete vehicle.");
-    } finally {
       setDeleting(false);
+      setShowConfirm(false);
     }
-  };
+  }, [id, navigate]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-32">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-b-primary" />
-      </div>
-    );
-  }
-
-  if (error || !vehicle) {
-    return (
-      <div className="flex items-center gap-3 rounded-xl border border-error/30 bg-error-container px-5 py-4 text-on-error-container">
-        <AlertCircle size={18} />
-        <p className="text-sm">{error || "Vehicle not found."}</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen={false} />;
+  if (error || !vehicle) return <ErrorAlert message={error || "Vehicle not found."} onRetry={refetch} />;
 
   return (
     <div className="space-y-6">
-      <Link to="/vehicles" className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface">
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back to Vehicles
-      </Link>
+      <ConfirmDialog
+        open={showConfirm}
+        title="Delete vehicle"
+        message="This will permanently delete this vehicle. This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
 
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container/40">
-          <Car size={24} className="text-on-primary-container" aria-hidden="true" />
-        </div>
-        <div className="flex-1">
-          <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">
-            {vehicle.year} {vehicle.make} {vehicle.model}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link to={`/vehicles/${id}/edit`} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface" aria-label="Edit vehicle">
-            <Pencil size={16} />
-          </Link>
-          <button onClick={handleDelete} disabled={deleting} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container disabled:opacity-60" aria-label="Delete vehicle">
-            <Trash2 size={16} />
-          </button>
-        </div>
-      </div>
+      <EntityDetailHeader
+        backTo="/vehicles"
+        backLabel="Back to Vehicles"
+        icon={Car}
+        name={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+        editTo={`/vehicles/${id}/edit`}
+        onDelete={() => setShowConfirm(true)}
+        deleting={deleting}
+      />
 
       <h2 className="font-heading text-lg font-semibold text-on-surface">
         Compatible Items ({vehicle.items?.length ?? 0})
@@ -92,6 +62,13 @@ export default function VehicleDetailPage() {
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-outline-variant bg-surface-container">
+          <div className="flex items-center border-b border-outline-variant bg-surface-container-high px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant sm:text-xs">
+            <span className="flex-1">Name</span>
+            <div className="flex items-center gap-4">
+              <span className="w-10 text-right">Qty</span>
+              <span className="w-20 text-right">Price</span>
+            </div>
+          </div>
           {vehicle.items.map((iv, i) => (
             <Link
               key={iv.item.id}
@@ -107,8 +84,8 @@ export default function VehicleDetailPage() {
                 )}
               </div>
               <div className="flex items-center gap-4">
-                <span className="font-data text-on-surface-variant">x{iv.item.quantity}</span>
-                <span className="font-data text-on-surface-variant">{formatPrice(iv.item.price)}</span>
+                <span className="w-10 text-right font-data text-on-surface-variant">x{iv.item.quantity}</span>
+                <span className="w-20 text-right font-data text-on-surface-variant">{formatPrice(iv.item.price)}</span>
               </div>
             </Link>
           ))}

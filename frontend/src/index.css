@@ -22,6 +22,9 @@
   --color-error-container: #f9dedc;
   --color-on-error-container: #410e0b;
 
+  --color-success: #2e7d32;
+  --color-on-success: #ffffff;
+
   --color-background: #fcfbff;
   --color-on-background: #1a1b21;
   --color-surface: #fcfbff;
@@ -134,6 +137,11 @@
 @keyframes scale-in {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,57 +1,37 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Plus, Car, ArrowRight, AlertCircle } from "lucide-react";
+import { Plus, Car, ArrowRight } from "lucide-react";
 import { getVehicles } from "../api/services";
+import { useFetch } from "../hooks/useFetch";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
 
 export default function VehiclesPage() {
-  const [vehicles, setVehicles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { data: vehicles, loading, error, refetch } = useFetch(() => getVehicles());
 
-  useEffect(() => {
-    let cancelled = false;
-    getVehicles()
-      .then((data) => { if (!cancelled) setVehicles(data); })
-      .catch(() => { if (!cancelled) setError("Failed to load vehicles."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-32">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-b-primary" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center gap-3 rounded-xl border border-error/30 bg-error-container px-5 py-4 text-on-error-container">
-        <AlertCircle size={18} />
-        <p className="text-sm">{error}</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen={false} />;
+  if (error) return <ErrorAlert message={error} onRetry={refetch} />;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">Vehicles</h1>
-        <Link to="/vehicles/new" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">Vehicles</h1>
+          <p className="mt-1 text-sm text-on-surface-variant">See which vehicles are compatible with your parts.</p>
+        </div>
+        <Link to="/vehicles/new" className="inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto">
           <Plus size={16} aria-hidden="true" />
           Add Vehicle
         </Link>
       </div>
 
-      {vehicles.length === 0 ? (
+      {vehicles?.length === 0 ? (
         <div className="rounded-2xl border border-outline-variant bg-surface-container p-12 text-center">
           <Car size={40} className="mx-auto mb-4 text-on-surface-variant/40" aria-hidden="true" />
           <p className="text-on-surface-variant">No vehicles yet. Add your first vehicle to get started.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {vehicles.map((veh, i) => (
+          {vehicles?.map((veh, i) => (
             <Link
               key={veh.id}
               to={`/vehicles/${veh.id}`}

@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-
-const STORAGE_KEY = "motiv-theme";
+import { STORAGE_THEME_KEY } from "../constants";
 
 const getInitialTheme = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = localStorage.getItem(STORAGE_THEME_KEY);
   if (stored) return stored === "dark";
   return window.matchMedia("(prefers-color-scheme: dark)").matches;
 };
@@ -26,7 +25,7 @@ export function useTheme() {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem(STORAGE_KEY, isDark ? "dark" : "light");
+    localStorage.setItem(STORAGE_THEME_KEY, isDark ? "dark" : "light");
   }, [isDark]);
 
   const toggle = useCallback(

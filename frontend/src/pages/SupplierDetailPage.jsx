@@ -1,86 +1,56 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router";
-import { ArrowLeft, Truck, Package, AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { useState, useCallback } from "react";
+import { useParams, useNavigate, Link } from "react-router";
+import { Truck, Package } from "lucide-react";
 import { getSupplier, deleteSupplier } from "../api/services";
-
-function formatPrice(val) {
-  const n = Number(val);
-  return isNaN(n) ? "$0.00" : `$${n.toFixed(2)}`;
-}
+import { useFetch } from "../hooks/useFetch";
+import { formatPrice } from "../utils/format";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
+import ConfirmDialog from "../components/ConfirmDialog";
+import EntityDetailHeader from "../components/EntityDetailHeader";
 
 export default function SupplierDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [supplier, setSupplier] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    getSupplier(id)
-      .then((data) => { if (!cancelled) setSupplier(data); })
-      .catch(() => { if (!cancelled) setError("Failed to load supplier."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [id]);
+  const { data: supplier, loading, error, refetch } = useFetch(() => getSupplier(id), [id]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("Delete this supplier? Items will keep their data.")) return;
+  const handleDelete = useCallback(async () => {
     setDeleting(true);
     try {
       await deleteSupplier(id);
       navigate("/suppliers");
     } catch {
-      setError("Failed to delete supplier.");
-    } finally {
       setDeleting(false);
+      setShowConfirm(false);
     }
-  };
+  }, [id, navigate]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-32">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-b-primary" />
-      </div>
-    );
-  }
-
-  if (error || !supplier) {
-    return (
-      <div className="flex items-center gap-3 rounded-xl border border-error/30 bg-error-container px-5 py-4 text-on-error-container">
-        <AlertCircle size={18} />
-        <p className="text-sm">{error || "Supplier not found."}</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen={false} />;
+  if (error || !supplier) return <ErrorAlert message={error || "Supplier not found."} onRetry={refetch} />;
 
   return (
     <div className="space-y-6">
-      <Link to="/suppliers" className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface">
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back to Suppliers
-      </Link>
+      <ConfirmDialog
+        open={showConfirm}
+        title="Delete supplier"
+        message="This will permanently delete this supplier. Items will keep their data. This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
 
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/10">
-          <Truck size={24} className="text-secondary" aria-hidden="true" />
-        </div>
-        <div className="flex-1">
-          <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">{supplier.name}</h1>
-          {supplier.contactName && (
-            <p className="mt-1 text-sm text-on-surface-variant">{supplier.contactName}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <Link to={`/suppliers/${id}/edit`} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface" aria-label="Edit supplier">
-            <Pencil size={16} />
-          </Link>
-          <button onClick={handleDelete} disabled={deleting} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container disabled:opacity-60" aria-label="Delete supplier">
-            <Trash2 size={16} />
-          </button>
-        </div>
-      </div>
+      <EntityDetailHeader
+        backTo="/suppliers"
+        backLabel="Back to Suppliers"
+        icon={Truck}
+        name={supplier.name}
+        description={supplier.contactName}
+        editTo={`/suppliers/${id}/edit`}
+        onDelete={() => setShowConfirm(true)}
+        deleting={deleting}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         {supplier.email && (
@@ -108,6 +78,13 @@ export default function SupplierDetailPage() {
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-outline-variant bg-surface-container">
+          <div className="flex items-center border-b border-outline-variant bg-surface-container-high px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant sm:text-xs">
+            <span className="flex-1">Name</span>
+            <div className="flex items-center gap-4">
+              <span className="w-10 text-right">Qty</span>
+              <span className="w-20 text-right">Price</span>
+            </div>
+          </div>
           {supplier.items.map((item, i) => (
             <Link
               key={item.id}
@@ -118,8 +95,8 @@ export default function SupplierDetailPage() {
             >
               <span className="font-medium text-on-surface">{item.name}</span>
               <div className="flex items-center gap-4">
-                <span className="font-data text-on-surface-variant">x{item.quantity}</span>
-                <span className="font-data text-on-surface-variant">{formatPrice(item.price)}</span>
+                <span className="w-10 text-right font-data text-on-surface-variant">x{item.quantity}</span>
+                <span className="w-20 text-right font-data text-on-surface-variant">{formatPrice(item.price)}</span>
               </div>
             </Link>
           ))}

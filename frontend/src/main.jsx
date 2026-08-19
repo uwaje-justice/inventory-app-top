@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 
 import "@fontsource-variable/quicksand";
 import "@fontsource-variable/space-grotesk";
-import "@fontsource-variable/dm-sans";
 import "@fontsource-variable/inter";
 
 import App from "./App";

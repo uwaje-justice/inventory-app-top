@@ -1,86 +1,56 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router";
-import { ArrowLeft, Package, AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { useState, useCallback } from "react";
+import { useParams, useNavigate, Link } from "react-router";
+import { Package, Car } from "lucide-react";
 import { getItem, deleteItem } from "../api/services";
-
-function formatPrice(val) {
-  const n = Number(val);
-  return isNaN(n) ? "$0.00" : `$${n.toFixed(2)}`;
-}
+import { useFetch } from "../hooks/useFetch";
+import { formatPrice } from "../utils/format";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
+import ConfirmDialog from "../components/ConfirmDialog";
+import EntityDetailHeader from "../components/EntityDetailHeader";
 
 export default function ItemDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [item, setItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    getItem(id)
-      .then((data) => { if (!cancelled) setItem(data); })
-      .catch(() => { if (!cancelled) setError("Failed to load item."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [id]);
+  const { data: item, loading, error, refetch } = useFetch(() => getItem(id), [id]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("Delete this item?")) return;
+  const handleDelete = useCallback(async () => {
     setDeleting(true);
     try {
       await deleteItem(id);
       navigate("/items");
     } catch {
-      setError("Failed to delete item.");
-    } finally {
       setDeleting(false);
+      setShowConfirm(false);
     }
-  };
+  }, [id, navigate]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-32">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-b-primary" />
-      </div>
-    );
-  }
-
-  if (error || !item) {
-    return (
-      <div className="flex items-center gap-3 rounded-xl border border-error/30 bg-error-container px-5 py-4 text-on-error-container">
-        <AlertCircle size={18} />
-        <p className="text-sm">{error || "Item not found."}</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen={false} />;
+  if (error || !item) return <ErrorAlert message={error || "Item not found."} onRetry={refetch} />;
 
   return (
     <div className="space-y-6">
-      <Link to="/items" className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface">
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back to Items
-      </Link>
+      <ConfirmDialog
+        open={showConfirm}
+        title="Delete item"
+        message="This will permanently delete this item. This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
 
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-tertiary/10">
-          <Package size={24} className="text-tertiary" aria-hidden="true" />
-        </div>
-        <div className="flex-1">
-          <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">{item.name}</h1>
-          {item.description && (
-            <p className="mt-1 text-sm text-on-surface-variant">{item.description}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <Link to={`/items/${id}/edit`} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface" aria-label="Edit item">
-            <Pencil size={16} />
-          </Link>
-          <button onClick={handleDelete} disabled={deleting} className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container disabled:opacity-60" aria-label="Delete item">
-            <Trash2 size={16} />
-          </button>
-        </div>
-      </div>
+      <EntityDetailHeader
+        backTo="/items"
+        backLabel="Back to Items"
+        icon={Package}
+        name={item.name}
+        description={item.description}
+        editTo={`/items/${id}/edit`}
+        onDelete={() => setShowConfirm(true)}
+        deleting={deleting}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
@@ -96,7 +66,7 @@ export default function ItemDetailPage() {
         ))}
       </div>
 
-      {item.vehicles?.length > 0 && (
+      {item.vehicles?.length > 0 ? (
         <div>
           <h2 className="mb-3 font-heading text-lg font-semibold text-on-surface">
             Compatible Vehicles ({item.vehicles.length})
@@ -114,6 +84,11 @@ export default function ItemDetailPage() {
               </Link>
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-outline-variant bg-surface-container p-8 text-center">
+          <Car size={32} className="mx-auto mb-3 text-on-surface-variant/40" aria-hidden="true" />
+          <p className="text-sm text-on-surface-variant">No compatible vehicles yet.</p>
         </div>
       )}
     </div>

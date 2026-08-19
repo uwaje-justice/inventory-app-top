@@ -1,145 +1,68 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router";
-import { ArrowLeft, Truck } from "lucide-react";
+import { useParams, useNavigate } from "react-router";
+import { Truck } from "lucide-react";
 import { getSupplier, createSupplier, updateSupplier } from "../api/services";
+import { useEntityForm } from "../hooks/useEntityForm";
+import LoadingSpinner from "../components/LoadingSpinner";
+import EntityFormLayout from "../components/EntityFormLayout";
+import FormInput from "../components/FormInput";
 
-const FIELDS = [
-  { name: "name", label: "Name", type: "text", required: true, placeholder: "e.g. AutoZone, NAPA" },
-  { name: "contactName", label: "Contact Name", type: "text", placeholder: "Optional contact person" },
-  { name: "email", label: "Email", type: "email", placeholder: "supplier@example.com" },
-  { name: "phone", label: "Phone", type: "tel", placeholder: "(555) 123-4567" },
-];
+const DEFAULTS = { name: "", contactName: "", email: "", phone: "" };
+
+function validate(values) {
+  const errs = {};
+  if (!values.name.trim()) errs.name = "Name is required";
+  if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errs.email = "Must be a valid email";
+  return errs;
+}
 
 export default function SupplierFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
 
-  const [values, setValues] = useState({ name: "", contactName: "", email: "", phone: "" });
-  const [errors, setErrors] = useState({});
-  const [apiError, setApiError] = useState("");
-  const [loading, setLoading] = useState(isEdit);
-  const [submitting, setSubmitting] = useState(false);
+  const { values, errors, apiError, loading, submitting, setField, handleSubmit } = useEntityForm({
+    defaultValues: DEFAULTS,
+    fetcher: isEdit ? getSupplier : null,
+    createFn: (data) => {
+      const payload = { name: data.name.trim() };
+      if (data.contactName?.trim()) payload.contactName = data.contactName.trim();
+      if (data.email?.trim()) payload.email = data.email.trim();
+      if (data.phone?.trim()) payload.phone = data.phone.trim();
+      return createSupplier(payload);
+    },
+    updateFn: (eid, data) => {
+      const payload = { name: data.name.trim() };
+      if (data.contactName?.trim()) payload.contactName = data.contactName.trim();
+      if (data.email?.trim()) payload.email = data.email.trim();
+      if (data.phone?.trim()) payload.phone = data.phone.trim();
+      return updateSupplier(eid, payload);
+    },
+    id,
+    isEdit,
+  });
 
-  useEffect(() => {
-    if (!isEdit) return;
-    let cancelled = false;
-    getSupplier(id)
-      .then((sup) => {
-        if (cancelled) return;
-        setValues({ name: sup.name || "", contactName: sup.contactName || "", email: sup.email || "", phone: sup.phone || "" });
-      })
-      .catch(() => { if (!cancelled) setApiError("Failed to load supplier."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [id, isEdit]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) { setErrors((prev) => { const next = { ...prev }; delete next[name]; return next; }); }
-    if (apiError) setApiError("");
-  };
-
-  const validate = () => {
-    const errs = {};
-    if (!values.name.trim()) errs.name = "Name is required";
-    if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errs.email = "Must be a valid email";
-    return errs;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setApiError("");
-    const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-
-    setSubmitting(true);
-    try {
-      const payload = { name: values.name.trim() };
-      if (values.contactName.trim()) payload.contactName = values.contactName.trim();
-      if (values.email.trim()) payload.email = values.email.trim();
-      if (values.phone.trim()) payload.phone = values.phone.trim();
-
-      if (isEdit) { await updateSupplier(id, payload); }
-      else { await createSupplier(payload); }
-      navigate("/suppliers");
-    } catch (err) {
-      setApiError(err.response?.data?.message || "Something went wrong.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-32">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-b-primary" />
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen={false} />;
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
-      <Link to="/suppliers" className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface">
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back to Suppliers
-      </Link>
-
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/10">
-          <Truck size={24} className="text-secondary" aria-hidden="true" />
-        </div>
-        <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">
-          {isEdit ? "Edit Supplier" : "New Supplier"}
-        </h1>
-      </div>
-
-      <div className="rounded-2xl border border-outline-variant bg-surface-container p-6 sm:p-8">
-        {apiError && (
-          <div role="alert" className="mb-6 rounded-xl border border-error/30 bg-error-container px-4 py-3 text-sm text-on-error-container animate-slide-up">
-            {apiError}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} noValidate>
-          <fieldset disabled={submitting} className="space-y-5 border-none p-0 m-0">
-            <legend className="sr-only">{isEdit ? "Edit" : "Create"} supplier form</legend>
-            {FIELDS.map((field, i) => (
-              <div key={field.name} className="animate-slide-up" style={{ animationDelay: `${i * 60}ms` }}>
-                <label htmlFor={field.name} className="mb-1.5 block text-sm font-medium text-on-surface">
-                  {field.label}
-                  {field.required && <span className="ml-0.5 text-error" aria-hidden="true">*</span>}
-                </label>
-                <input
-                  id={field.name} name={field.name} type={field.type} value={values[field.name]} onChange={handleChange}
-                  aria-required={field.required} aria-invalid={!!errors[field.name]}
-                  placeholder={field.placeholder}
-                  className={`w-full rounded-xl border bg-surface py-3 pl-4 pr-4 text-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-2 focus:ring-primary/20 ${errors[field.name] ? "border-error focus:border-error focus:ring-error/20" : "border-outline-variant"}`}
-                />
-                {errors[field.name] && <p role="alert" className="mt-1.5 text-xs text-error animate-slide-up">{errors[field.name]}</p>}
-              </div>
-            ))}
-          </fieldset>
-
-          <div className="mt-8 flex gap-3 animate-slide-up" style={{ animationDelay: "240ms" }}>
-            <Link to="/suppliers" className="rounded-full border border-outline-variant px-6 py-3 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high">
-              Cancel
-            </Link>
-            <button
-              type="submit" disabled={submitting}
-              className="flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {submitting ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-transparent border-b-on-primary" />
-                  Saving...
-                </>
-              ) : isEdit ? "Save Changes" : "Create Supplier"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <EntityFormLayout
+      backTo="/suppliers"
+      backLabel="Back to Suppliers"
+      icon={Truck}
+      title={isEdit ? "Edit Supplier" : "New Supplier"}
+      apiError={apiError}
+      submitting={submitting}
+      submittingLabel={isEdit ? "Save Changes" : "Create Supplier"}
+    >
+      <form id="entity-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(validate, () => navigate("/suppliers")); }} noValidate>
+        <fieldset disabled={submitting} className="space-y-5 border-none p-0 m-0">
+          <legend className="sr-only">{isEdit ? "Edit" : "Create"} supplier form</legend>
+          <FormInput label="Name" name="name" required value={values.name} onChange={(e) => setField("name", e.target.value)} error={errors.name} placeholder="e.g. AutoZone, NAPA" />
+          <FormInput label="Contact Name" name="contactName" value={values.contactName} onChange={(e) => setField("contactName", e.target.value)} placeholder="Optional contact person" />
+          <FormInput label="Email" name="email" type="email" value={values.email} onChange={(e) => setField("email", e.target.value)} error={errors.email} placeholder="supplier@example.com" />
+          <FormInput label="Phone" name="phone" type="tel" value={values.phone} onChange={(e) => setField("phone", e.target.value)} placeholder="(555) 123-4567" />
+        </fieldset>
+      </form>
+    </EntityFormLayout>
   );
 }

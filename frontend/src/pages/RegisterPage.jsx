@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { User, Mail, Lock } from "lucide-react";
-import api from "../api/axios";
+import { register as registerApi } from "../api/services";
+import { setToken } from "../utils/auth";
 import BackLink from "../components/BackLink";
 import ThemeToggle from "../components/ThemeToggle";
 import FormInput from "../components/FormInput";
@@ -83,14 +84,12 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const { data } = await api.post("/api/auth/register", {
+      const result = await registerApi({
         username: values.username.trim(),
         email: values.email.trim(),
         password: values.password,
-        confirmPassword: values.confirmPassword,
       });
-
-      localStorage.setItem("motiv-token", data.token);
+      setToken(result.token);
       navigate("/dashboard");
     } catch (err) {
       const message =
@@ -108,23 +107,23 @@ export default function RegisterPage() {
         <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-tertiary/10 blur-3xl" aria-hidden="true" />
 
-        {/* Theme toggle */}
-        <div className="absolute top-5 right-5 md:top-8 md:right-8">
-          <ThemeToggle />
-        </div>
-
         <div className="relative w-full max-w-md animate-slide-up">
           <div className="mb-8">
             <BackLink />
           </div>
 
           <div className="rounded-2xl border border-outline-variant bg-surface-container p-6 sm:p-8">
-            <h1 className="mb-2 font-heading text-2xl font-bold text-on-surface md:text-3xl">
-              Create your account
-            </h1>
-            <p className="mb-8 text-sm text-on-surface-variant">
-              Start managing your vehicle parts inventory today.
-            </p>
+            <div className="mb-8 flex items-start justify-between">
+              <div>
+                <h1 className="font-heading text-2xl font-bold text-on-surface md:text-3xl">
+                  Create your account
+                </h1>
+                <p className="mt-1 text-sm text-on-surface-variant">
+                  Start managing your vehicle parts inventory today.
+                </p>
+              </div>
+              <ThemeToggle />
+            </div>
 
             {apiError && (
               <div

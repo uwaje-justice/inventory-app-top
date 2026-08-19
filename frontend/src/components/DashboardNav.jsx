@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { Menu, X, LogOut, LayoutDashboard, Boxes, Package, Truck, Car } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
+import { logout } from "../utils/auth";
 
 const navLinks = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -10,11 +12,6 @@ const navLinks = [
   { to: "/suppliers", label: "Suppliers", icon: Truck },
   { to: "/vehicles", label: "Vehicles", icon: Car },
 ];
-
-function handleLogout() {
-  localStorage.removeItem("motiv-token");
-  window.location.href = "/login";
-}
 
 export default function DashboardNav() {
   const [open, setOpen] = useState(false);
@@ -37,9 +34,7 @@ export default function DashboardNav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:px-8">
-        <Link to="/dashboard" className="font-heading text-xl font-bold tracking-tight text-on-surface">
-          motiv
-        </Link>
+        <Logo to="/dashboard" />
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-1 md:flex">
@@ -66,7 +61,7 @@ export default function DashboardNav() {
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
           <button
-            onClick={handleLogout}
+            onClick={logout}
             className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <LogOut size={16} aria-hidden="true" />
@@ -115,7 +110,7 @@ export default function DashboardNav() {
             })}
           </ul>
           <button
-            onClick={handleLogout}
+            onClick={logout}
             className="mt-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary animate-click-in"
             style={{ animationDelay: `${navLinks.length * 50 + 80}ms` }}
           >
