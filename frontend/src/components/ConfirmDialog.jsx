@@ -42,7 +42,7 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-on-surface/40 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in"
         onClick={onCancel}
         aria-hidden="true"
       />
